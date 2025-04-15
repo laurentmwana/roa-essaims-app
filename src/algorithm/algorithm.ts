@@ -1,29 +1,23 @@
 import { Particle, ProblemType } from "@/types/algorithm";
+import { KnapsackProblem } from "./knapsack";
+import { TSPProblem } from "./tsp";
 
-interface KnapsackEvaluator {
-  (solution: number[]): number;
-  weightsAndValues: any[];
-}
-
-interface TSPEvaluator {
-  (solution: number[]): number;
-  distanceMatrix: number[][];
-}
-
-type Evaluator = KnapsackEvaluator | TSPEvaluator;
+type Evaluator = TSPProblem | KnapsackProblem;
 
 export class AlgorithmPSO {
+
   private numDimensions: number;
 
   constructor(
     private problemType: ProblemType,
-    private evaluator: Evaluator,
+    private problem: Evaluator,
     private numParticles = 30,
     private maxIter = 100
   ) {
+
     this.numDimensions = problemType === 'knapsack'
-      ? (evaluator as KnapsackEvaluator).weightsAndValues.length
-      : (evaluator as TSPEvaluator).distanceMatrix.length;
+      ? (problem as KnapsackProblem).weightsAndValues.length
+      : (problem as TSPProblem).distanceMatrix.length;
   }
 
   private sigmoid(x: number): number {
@@ -54,7 +48,7 @@ export class AlgorithmPSO {
         ? Array(this.numDimensions).fill(0)
         : undefined;
 
-      const score = this.evaluator(position);
+      const score = this.problem.evaluate(position);
 
       particles.push({
         position,
@@ -103,7 +97,7 @@ export class AlgorithmPSO {
           this.swapMutation(p.position);
         }
 
-        const score = this.evaluator(p.position);
+        const score = this.problem.evaluate(p.position);
 
         if (this.problemType === 'knapsack') {
           if (score > p.bestScore) {

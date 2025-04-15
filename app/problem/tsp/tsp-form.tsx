@@ -21,13 +21,13 @@ import { MatrixSchema, MatrixSchemaInfer } from "@/lib/schema"
 import { toast } from "sonner"
 
 const onSubmit = (values: MatrixSchemaInfer) => {
-    toast("DATA", {
-        description: JSON.stringify(values),
-        action: {
-            label: "Undo",
-            onClick: () => console.log("Undo"),
-        },
-    })
+    // toast("DATA", {
+    //     description: JSON.stringify(values),
+    //     action: {
+    //         label: "Undo",
+    //         onClick: () => console.log("Undo"),
+    //     },
+    // })
 }
 
 export const TspForm = () => {

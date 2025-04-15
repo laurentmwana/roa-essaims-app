@@ -1,7 +1,7 @@
   export class KnapsackProblem {
 
     constructor(
-      private weightsAndValues: number[][],
+      public weightsAndValues: number[][],
       private capacity: number
     ) {}
 

@@ -21,11 +21,11 @@ import { WeightValueInput } from "@/components/ui/weight-value"
 import { toast } from "sonner"
 
 const onSubmit = (values: KnapsackSchemaInfer) => {
-  toast.success("DATA", {
-    description: <pre>
-      {JSON.stringify(values)}
-    </pre>
-  })
+  // toast.success("DATA", {
+  //   description: <pre>
+  //     {JSON.stringify(values)}
+  //   </pre>
+  // })
 }
 
 export const KnapsackForm = () => {
