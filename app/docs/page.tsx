@@ -1,14 +1,13 @@
+"use client"
+
 import { SectionTitle } from "@/components/shared/section-title";
 import { BaseLayout } from "~/layouts/base-layout";
 
 const DocIndex = () => {
     return <BaseLayout>
-
-            <div className="container">
-                <SectionTitle title="Documentation" />
-            </div>
-    
-    
+        <div className="container">
+            <SectionTitle title="Documentation" />
+        </div>
     </BaseLayout>
 }
 

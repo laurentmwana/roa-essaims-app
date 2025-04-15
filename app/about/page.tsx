@@ -1,9 +1,11 @@
+"use client"
+
 import { SectionTitle } from "@/components/shared/section-title";
 import { BaseLayout } from "~/layouts/base-layout";
 
 const About = () => {
     return (
-        
+
      <BaseLayout>
 
 

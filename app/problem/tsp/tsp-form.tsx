@@ -16,31 +16,29 @@ import {
 import { Input } from "@/components/ui/input"
 
 import { z } from "zod"
-import { KnapsackSchema, KnapsackSchemaInfer } from "@/lib/schema"
-import { WeightValueInput } from "@/components/ui/weight-value"
+import { MatrixDistanceInput } from "@/components/ui/matrix-distance"
+import { MatrixSchema, MatrixSchemaInfer } from "@/lib/schema"
 import { toast } from "sonner"
 
-const onSubmit = (values: KnapsackSchemaInfer) => {
-  toast.success("DATA", {
-    description: <pre>
-      {JSON.stringify(values)}
-    </pre>
-  })
+const onSubmit = (values: MatrixSchemaInfer) => {
+    toast("DATA", {
+        description: JSON.stringify(values),
+        action: {
+            label: "Undo",
+            onClick: () => console.log("Undo"),
+        },
+    })
 }
 
-export const KnapsackForm = () => {
+export const TspForm = () => {
 
-    const form = useForm<KnapsackSchemaInfer>({
-        resolver: zodResolver(KnapsackSchema),
+    const form = useForm<MatrixSchemaInfer>({
+        resolver: zodResolver(MatrixSchema),
         defaultValues: {
             capacity: 1,
             maxIter: 30,
             numParticles: 100,
-            items: [{
-                obj: 'Object 1',
-                value: 1,
-                weight: 1
-            }]
+            matrices: []
         },
     })
 
@@ -58,7 +56,7 @@ export const KnapsackForm = () => {
                 <Input min={1} type="number" {...field} />
               </FormControl>
               <FormDescription>
-              Entrez la capacité maximale du sac à dos.
+              Capacité maximale de transport autorisée.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -75,7 +73,7 @@ export const KnapsackForm = () => {
                 <Input min={1} type="number" {...field} />
               </FormControl>
               <FormDescription>
-                Entrez le nombre d’itérations à exécuter.
+              Nombre de fois que l’algorithme va s’exécuter pour optimiser les résultats.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -89,13 +87,13 @@ export const KnapsackForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Nombre de particules utilisées dans le PSO
+              Nombre de particules utilisées dans le PSO
               </FormLabel>
               <FormControl>
                 <Input min={1} type="number" {...field} />
               </FormControl>
               <FormDescription>
-                Entrez le nombre total de particules.
+              Détermine le nombre d’agents explorant les solutions possibles
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -104,20 +102,19 @@ export const KnapsackForm = () => {
 
         <FormField
           control={form.control}
-          name="items"
+          name="matrices"
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-              Liste des objets (poids et valeur)
+              Matrice de distances
               </FormLabel>
               <FormControl>
-                <WeightValueInput
-                    capacity={form.watch('capacity') || 1}
-                    dataItems={field.value}
-                />
+
+                <MatrixDistanceInput initialMatrix={field.value}  />
+
               </FormControl>
               <FormDescription>
-                Ajoutez un ou plusieurs objets avec leur poids et leur valeur.
+              Indique les distances entre les différentes villes ou points.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -131,6 +128,4 @@ export const KnapsackForm = () => {
     </Form>
 
     )
-
-
 }
