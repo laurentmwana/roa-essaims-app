@@ -1,7 +1,6 @@
-
   export class TSPProblem {
 
-    constructor(private distanceMatrix: number[][]) {}
+    constructor(public distanceMatrix: number[][]) {}
 
     public evaluate(path: number[]): number {
       let distance = 0;

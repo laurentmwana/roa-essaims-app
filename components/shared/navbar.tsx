@@ -22,7 +22,7 @@ export const NavbarBase = () => {
 
     return (
         <nav className="bg-background/95 border-border sticky top-0 z-50 border-b backdrop-blur-sm">
-            <div className="mx-auto max-w-7xl px-4">
+            <div className="container">
                 <div className="flex items-center justify-between py-4">
                     <div className="flex items-center">
                         Essaims
@@ -47,7 +47,7 @@ export const NavbarBase = () => {
                             {/* <ThemeToggle variant="ghost" /> */}
 
                             <ThemeToggle />
-                         
+
                         </div>
                         <Button variant="ghost" size="icon" className="lg:hidden" onClick={toggleMenu}>
                             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
