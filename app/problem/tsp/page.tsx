@@ -11,12 +11,12 @@ const TspIndex = () => {
             </SectionTitle>
 
         <div className="max-w-2xl">
-            <Card>
-                <CardContent>
-                    <TspForm />
-                </CardContent>
-            </Card>
-        </div>
+                <Card>
+                    <CardContent>
+                        <TspForm />
+                    </CardContent>
+                </Card>
+            </div>
         </div>
     </BaseLayout>
 }
