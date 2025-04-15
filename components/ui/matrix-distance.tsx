@@ -1,8 +1,6 @@
 "use client"
 
-import React from "react"
-
-import { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -22,20 +20,7 @@ export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceI
   const [error, setError] = useState<string | null>(null)
   const [matrix, setMatrix] = useState<number[][]>([])
 
-  useEffect(() => {
-    if (initialMatrix && initialMatrix.length > 0) {
-      setSize(initialMatrix.length)
-      setMatrix(initialMatrix)
-    } else {
-      resizeMatrix()
-    }
-  }, [initialMatrix])
-
-  useEffect(() => {
-    resizeMatrix()
-  }, [size])
-
-  const resizeMatrix = () => {
+  const resizeMatrix = useCallback(() => {
     const currentSize = matrix.length
     if (currentSize === size) return
 
@@ -56,7 +41,20 @@ export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceI
 
     setMatrix(newMatrix)
     if (onChange) onChange(newMatrix)
-  }
+  }, [matrix, size, onChange])
+
+  useEffect(() => {
+    if (initialMatrix && initialMatrix.length > 0) {
+      setSize(initialMatrix.length)
+      setMatrix(initialMatrix)
+    } else {
+      resizeMatrix()
+    }
+  }, [initialMatrix, resizeMatrix])
+
+  useEffect(() => {
+    resizeMatrix()
+  }, [size, resizeMatrix])
 
   const handleValueChange = (rowIndex: number, colIndex: number, value: number) => {
     if (rowIndex === colIndex) return
@@ -64,7 +62,7 @@ export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceI
     const numValue = value
 
     try {
-      z.number().min(0, "Les distances doivent être positives ou nulles").parse(numValue) // traduit
+      z.number().min(0, "Les distances doivent être positives ou nulles").parse(numValue)
       setError(null)
 
       const updatedMatrix = [...matrix]
@@ -115,7 +113,7 @@ export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceI
       {/* Contrôles */}
       <div className="flex flex-wrap gap-4 items-center">
         <FormItem className="w-auto">
-          <Label htmlFor="size">Taille</Label> {/* traduit */}
+          <Label htmlFor="size">Taille</Label>
           <Input id="size" type="number" min={2} max={10} value={size} onChange={handleSizeChange} className="w-20" />
         </FormItem>
 
@@ -125,11 +123,11 @@ export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceI
             checked={enforceSymmetry}
             onCheckedChange={(checked) => setEnforceSymmetry(checked as boolean)}
           />
-          <Label htmlFor="symmetry">Forcer la symétrie</Label> {/* traduit */}
+          <Label htmlFor="symmetry">Forcer la symétrie</Label>
         </div>
 
         <Button onClick={resetMatrix} variant="outline" size="sm" className="ml-auto">
-          Réinitialiser {/* traduit */}
+          Réinitialiser
         </Button>
       </div>
 
@@ -157,7 +155,7 @@ export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceI
 
           {matrix.map((row, rowIndex) => (
             <React.Fragment key={`row-${rowIndex}`}>
-              <div  className="flex items-center justify-center font-medium w-12 h-10">
+              <div className="flex items-center justify-center font-medium w-12 h-10">
                 Ville {rowIndex + 1}
               </div>
               {row.map((cell, colIndex) => (
@@ -182,7 +180,7 @@ export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceI
 
       {/* Infos */}
       <div className="text-sm text-gray-600 border border-gray-200 dark:border-gray-600 p-3 rounded-lg">
-        <p className="font-medium mb-1">Contraintes :</p> {/* traduit */}
+        <p className="font-medium mb-1">Contraintes :</p>
         <ul className="list-disc list-inside ml-2 space-y-1">
           <li>Matrice carrée (même nombre de lignes et de colonnes)</li>
           <li>Les cellules diagonales sont fixées à 0 (distance d&#39;une ville à elle-même)</li>
