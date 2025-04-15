@@ -3,9 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/themes/theme-provider";
 import { Inter } from 'next/font/google'
 
-const inter = Inter({
-  variable: '--font-inter',
-})
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: "Essaims",
@@ -20,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body
-        className={`${inter.className} antialiased`}
+        className={inter.className}
       >
           <ThemeProvider
             attribute="class"
