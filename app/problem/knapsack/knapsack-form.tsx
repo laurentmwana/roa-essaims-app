@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -14,18 +13,11 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-
-import { z } from "zod"
 import { KnapsackSchema, KnapsackSchemaInfer } from "@/lib/schema"
 import { WeightValueInput } from "@/components/ui/weight-value"
-import { toast } from "sonner"
 
 const onSubmit = (values: KnapsackSchemaInfer) => {
-  // toast.success("DATA", {
-  //   description: <pre>
-  //     {JSON.stringify(values)}
-  //   </pre>
-  // })
+  console.log(values)
 }
 
 export const KnapsackForm = () => {
@@ -125,7 +117,7 @@ export const KnapsackForm = () => {
         />
 
         <Button type="submit">
-            Appliquer l'algorithme
+            Appliquer l&#39;algorithme
         </Button>
       </form>
     </Form>

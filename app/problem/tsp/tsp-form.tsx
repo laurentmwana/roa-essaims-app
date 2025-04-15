@@ -14,20 +14,11 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-
-import { z } from "zod"
 import { MatrixDistanceInput } from "@/components/ui/matrix-distance"
 import { MatrixSchema, MatrixSchemaInfer } from "@/lib/schema"
-import { toast } from "sonner"
 
 const onSubmit = (values: MatrixSchemaInfer) => {
-    // toast("DATA", {
-    //     description: JSON.stringify(values),
-    //     action: {
-    //         label: "Undo",
-    //         onClick: () => console.log("Undo"),
-    //     },
-    // })
+  console.log(values)
 }
 
 export const TspForm = () => {
@@ -122,7 +113,7 @@ export const TspForm = () => {
         />
 
         <Button type="submit">
-            Appliquer l'algorithme
+          Appliquer l&#39;algorithme
         </Button>
       </form>
     </Form>

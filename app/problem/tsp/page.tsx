@@ -1,6 +1,5 @@
 import { SectionTitle } from "@/components/shared/section-title";
 import { Card, CardContent } from "@/components/ui/card";
-import { MatrixDistanceInput } from "@/components/ui/matrix-distance";
 import { BaseLayout } from "~/layouts/base-layout";
 import { TspForm } from "./tsp-form";
 
@@ -12,12 +11,12 @@ const TspIndex = () => {
             </SectionTitle>
 
         <div className="max-w-2xl">
-                      <Card>
-                          <CardContent>
-                              <TspForm />
-                          </CardContent>
-                      </Card>
-                  </div>
+            <Card>
+                <CardContent>
+                    <TspForm />
+                </CardContent>
+            </Card>
+        </div>
         </div>
     </BaseLayout>
 }

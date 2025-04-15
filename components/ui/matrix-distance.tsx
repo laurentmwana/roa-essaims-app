@@ -185,7 +185,7 @@ export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceI
         <p className="font-medium mb-1">Contraintes :</p> {/* traduit */}
         <ul className="list-disc list-inside ml-2 space-y-1">
           <li>Matrice carrée (même nombre de lignes et de colonnes)</li>
-          <li>Les cellules diagonales sont fixées à 0 (distance d'une ville à elle-même)</li>
+          <li>Les cellules diagonales sont fixées à 0 (distance d&#39;une ville à elle-même)</li>
           <li>Toutes les distances doivent être positives ou nulles</li>
           {enforceSymmetry && <li>Symétrie forcée (distance de A vers B = distance de B vers A)</li>}
         </ul>
