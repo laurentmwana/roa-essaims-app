@@ -20,8 +20,8 @@ test('algorithm pso with the problem knapsack', () => {
       const knapsackPSO = new AlgorithmPSO(
         'knapsack',
         knapsack,
-        50,  // nombre de particules
-        100  // nombre d'itérations
+        50, 
+        100
       );
 
     const knapsackResult = knapsackPSO.run();
