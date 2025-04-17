@@ -11,3 +11,9 @@ interface Particle {
     bestPos: number[];
     bestScore: number;
   }
+
+  
+export interface AlgorithmResult {
+  best: number[],
+  score: number
+}
