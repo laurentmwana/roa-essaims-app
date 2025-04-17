@@ -19,7 +19,7 @@ export const KnapsackSchema = z.object({
 
     obj: z.string().min(1, 'Le nom de l’objet est requis.'),
   })).min(1, 'Au moins un objet est requis.'),
-})
+});
 
 export type KnapsackSchemaInfer = z.infer<typeof KnapsackSchema>
 

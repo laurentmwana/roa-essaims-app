@@ -1,75 +1,69 @@
-import React, { useState, useMemo } from 'react';
-import { Input } from './input';
-import { Label } from './label';
-import { Button } from './button';
-import { Plus, X } from 'lucide-react';
+"use client"
 
-type WeightValueInputProps = {capacity: number, dataItems: WeightValueItem[]}
+import type React from "react"
+import { useState, useEffect } from "react"
+import { Input } from "./input"
+import { Label } from "./label"
+import { Button } from "./button"
+import { Plus, X } from "lucide-react"
 
-export const WeightValueInput: React.FC<WeightValueInputProps> = ({ capacity, dataItems }) => {
+export type WeightValueItem = {
+  obj: string
+  weight: number
+  value: number
+}
 
-  const [items, setItems] = useState<WeightValueItem[]>(dataItems);
+type WeightValueInputProps = {
+  dataItems: WeightValueItem[]
+  onChangeValueItem: (items: WeightValueItem[]) => void
+}
 
-  const totalWeight = useMemo(() => {
-    return items.reduce((sum, item) => sum + (item.weight || 0), 0);
-  }, [items]);
+export const WeightValueInput: React.FC<WeightValueInputProps> = ({ dataItems, onChangeValueItem }) => {
+  const [items, setItems] = useState<WeightValueItem[]>(dataItems || [])
 
-  const remainingCapacity = useMemo(() => {
-    return capacity - totalWeight;
-  }, [capacity, totalWeight]);
+  useEffect(() => {
+    if (dataItems && dataItems.length > 0) {
+      setItems(dataItems)
+    }
+  }, [dataItems])
 
-  const canAddMore = remainingCapacity > 0;
+  const updateParent = (newItems: WeightValueItem[]) => {
+    setItems(newItems)
+    onChangeValueItem(newItems)
+  }
 
   const addItem = () => {
-    if (canAddMore) {
-      setItems([
-        ...items,
-        {
-          weight: Math.min(1, remainingCapacity),
-          value: 1,
-          obj: `Object ${items.length + 1}`,
-        },
-      ]);
-    }
-  };
+    const newItems = [
+      ...items,
+      {
+        weight: 1,
+        value: 1,
+        obj: `Object ${items.length + 1}`,
+      },
+    ]
+    updateParent(newItems)
+  }
 
   const removeItem = (index: number) => {
-    const newItems = [...items];
-    newItems.splice(index, 1);
-    setItems(newItems);
-  };
+    const newItems = [...items]
+    newItems.splice(index, 1)
+    updateParent(newItems)
+  }
 
   const updateItem = (index: number, updated: Partial<WeightValueItem>) => {
-    const newItems = [...items];
-    newItems[index] = { ...newItems[index], ...updated };
-    setItems(newItems);
-  };
+    const newItems = [...items]
+    newItems[index] = { ...newItems[index], ...updated }
+    updateParent(newItems)
+  }
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between my-3">
-        <div>
-          <span className="font-medium text-sm">Capacité totale: {capacity}</span>
-        </div>
-        <div>
-          <span className={remainingCapacity < 0 ? 'text-red-500 font-bold' : 'text-primary-500'}>
-            Utilisé: {totalWeight} / {capacity}{' '}
-            {remainingCapacity < 0 ? (
-              <span className='text-sm'>(Dépassement de {Math.abs(remainingCapacity)})</span>
-            ) : (
-              <span className='text-sm'>(Reste: {remainingCapacity})</span>
-            )}
-          </span>
-        </div>
-      </div>
-
       {items.map((item, index) => (
         <div key={index} className="my-3 flex items-end gap-4">
-          <div className='grid gap-1'>
-            <Label htmlFor={`obj-${index}`}>
-                Object
-            </Label>
+          <div className="grid gap-1">
+            <Label htmlFor={`obj-${index}`}>Objet</Label>
             <Input
+              id={`obj-${index}`}
               type="text"
               value={item.obj}
               onChange={(e) => updateItem(index, { obj: e.target.value })}
@@ -78,26 +72,23 @@ export const WeightValueInput: React.FC<WeightValueInputProps> = ({ capacity, da
             />
           </div>
 
-          <div className='grid gap-1'>
-            <Label htmlFor={`weight-${index}`}>
-                Poids
-            </Label>
+          <div className="grid gap-1">
+            <Label htmlFor={`weight-${index}`}>Poids</Label>
             <Input
+              id={`weight-${index}`}
               type="number"
               min={1}
-              max={item.weight + remainingCapacity}
               value={item.weight}
               onChange={(e) => updateItem(index, { weight: Number(e.target.value) })}
-              className={`border rounded px-2 py-1 ${totalWeight > capacity ? 'border-red-500' : ''}`}
+              className="border rounded px-2 py-1"
               placeholder="Ex: 2"
             />
           </div>
 
-          <div className='grid gap-1'>
-            <Label htmlFor={`value-${index}`}>
-                Valeur
-            </Label>
+          <div className="grid gap-1">
+            <Label htmlFor={`value-${index}`}>Valeur</Label>
             <Input
+              id={`value-${index}`}
               type="number"
               min={1}
               value={item.value}
@@ -108,27 +99,18 @@ export const WeightValueInput: React.FC<WeightValueInputProps> = ({ capacity, da
           </div>
 
           {items.length > 1 && (
-            <Button
-              onClick={() => removeItem(index)}
-              variant="destructive"
-              size="sm"
-              title="Supprimer"
-            >
-                <X size={15} />
+            <Button onClick={() => removeItem(index)} variant="destructive" size="sm" title="Supprimer" type="button">
+              <X size={15} />
             </Button>
           )}
         </div>
       ))}
 
       <div>
-        <Button
-        size="sm"
-          onClick={addItem}
-          disabled={!canAddMore}
-        >
+        <Button size="sm" onClick={addItem} type="button">
           <Plus size={15} />
         </Button>
       </div>
     </div>
-  );
-};
+  )
+}
