@@ -2,7 +2,6 @@
 
 import type { KnapsackSchemaInfer } from "@/lib/schema"
 import { useEffect, useState } from "react"
-import { KnapsackTableSkeleton } from "./knapsack-skeleton"
 import { Button } from "@/components/ui/button"
 import { KnapsackStatementModal } from "./knapsack-statement"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -14,6 +13,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
 import { AlgorithmResult } from "@/types/algorithm"
 import { Badge } from "@/components/ui/badge"
+import { ProblemSkeleton } from "@/components/shared/problem-skeleton"
 
 type KnapsackResultProps = {
   values: KnapsackSchemaInfer
@@ -53,7 +53,7 @@ export const KnapsackResult = ({ values, onReset }: KnapsackResultProps) => {
   }, [values])
 
   if (isLoad) {
-    return <KnapsackTableSkeleton />
+    return <ProblemSkeleton />
   }
 
   if (error) {
@@ -80,7 +80,7 @@ export const KnapsackResult = ({ values, onReset }: KnapsackResultProps) => {
   const [weightTotal, weightObtained]  = calculateWeight(values.items, result.best)
 
   return (
-    <div>
+    <div className="container-card">
       <div className="flex items-center flex-wrap gap-5">
         <Button variant="outline" onClick={onReset}>
           Réinitialiser

@@ -138,6 +138,8 @@ const items = [
   { obj: "Téléphone", weight: 2, value: 60 },
 ]
 
+
+
 const result = [1, 0, 1] // Livre et Téléphone sont sélectionnés
 ```
 

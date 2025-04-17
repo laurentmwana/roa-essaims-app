@@ -15,14 +15,14 @@ export const NavbarBase = () => {
     const navItems = [
         { label: 'Accueil', href: "/" },
         { label: 'A propos', href: "/about" },
-        { label: 'Documentation', href: '/docs' },
+        { label: 'Comment ça marche', href: '/how-it-works' },
         { label: 'Problème 1', href: '/problem/knapsack' },
         { label: 'Problème 2', href: '/problem/tsp' },
     ];
 
     return (
         <nav className="bg-background/95 border-border sticky top-0 z-50 border-b backdrop-blur-sm">
-            <div className="container">
+            <div className="mx-auto px-5 max-w-6xl">
                 <div className="flex items-center justify-between py-4">
                     <div className="flex items-center">
                         Essaims
