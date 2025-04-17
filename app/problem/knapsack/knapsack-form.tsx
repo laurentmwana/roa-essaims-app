@@ -1,15 +1,23 @@
-"use client"
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { KnapsackSchema, type KnapsackSchemaInfer } from "@/lib/schema"
-import { WeightValueInput } from "@/components/ui/weight-value"
-import { useState } from "react"
-import { KnapsackResult } from "./knapsack-result"
-import { KnapsackStatementModal } from "./knapsack-statement"
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { Button } from '@/components/ui/button'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { KnapsackSchema, type KnapsackSchemaInfer } from '@/lib/schema'
+import { WeightValueInput } from '@/components/ui/weight-value'
+import { useState } from 'react'
+import { KnapsackResult } from './knapsack-result'
+import { KnapsackStatementModal } from './knapsack-statement'
 
 export const KnapsackForm = () => {
   const [values, setValues] = useState<KnapsackSchemaInfer>()
@@ -34,9 +42,9 @@ export const KnapsackForm = () => {
   return values ? (
     <KnapsackResult onReset={onReset} values={values} />
   ) : (
-    <div className="bg-card p-5 border rounded-md shadow-sm space-y-4">
-    <KnapsackStatementModal />
-      
+    <div className="space-y-4">
+      <KnapsackStatementModal />
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -98,7 +106,9 @@ export const KnapsackForm = () => {
                     }}
                   />
                 </FormControl>
-                <FormDescription>Ajoutez un ou plusieurs objets avec leur poids et leur valeur.</FormDescription>
+                <FormDescription>
+                  Ajoutez un ou plusieurs objets avec leur poids et leur valeur.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

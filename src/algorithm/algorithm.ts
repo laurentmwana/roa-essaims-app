@@ -1,4 +1,4 @@
-import { Particle, ProblemType } from "@/types/algorithm";
+import { AlgorithmResult, Particle, ProblemType } from "@/types/algorithm";
 import { KnapsackProblem } from "./knapsack";
 import { TSPProblem } from "./tsp";
 
@@ -60,7 +60,7 @@ export class AlgorithmPSO {
     return particles;
   }
 
-  public run(): { best: number[]; score: number } {
+  public run(): AlgorithmResult {
     const particles = this.initializeParticles();
 
     let globalBest = [...particles[0].bestPos];

@@ -1,19 +1,26 @@
-"use client"
+'use client'
 
-import type { KnapsackSchemaInfer } from "@/lib/schema"
-import { useEffect, useState } from "react"
-import { KnapsackTableSkeleton } from "./knapsack-skeleton"
-import { Button } from "@/components/ui/button"
-import { KnapsackStatementModal } from "./knapsack-statement"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { KnapsackProblem } from "@/src/algorithm/knapsack"
-import { AlgorithmPSO } from "@/src/algorithm/algorithm"
-import { calculateWeight } from "@/lib/utils"
-import type { WeightValueItem } from "@/components/ui/weight-value"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle } from "lucide-react"
-import { AlgorithmResult } from "@/types/algorithm"
-import { Badge } from "@/components/ui/badge"
+import type { KnapsackSchemaInfer } from '@/lib/schema'
+import { useEffect, useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { KnapsackStatementModal } from './knapsack-statement'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { KnapsackProblem } from '@/src/algorithm/knapsack'
+import { AlgorithmPSO } from '@/src/algorithm/algorithm'
+import { calculateWeight } from '@/lib/utils'
+import type { WeightValueItem } from '@/components/ui/weight-value'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { AlertCircle } from 'lucide-react'
+import { AlgorithmResult } from '@/types/algorithm'
+import { Badge } from '@/components/ui/badge'
+import { ProblemSkeleton } from '@/components/shared/problem-skeleton'
 
 type KnapsackResultProps = {
   values: KnapsackSchemaInfer
@@ -35,15 +42,21 @@ export const KnapsackResult = ({ values, onReset }: KnapsackResultProps) => {
 
         const knapsack = new KnapsackProblem(items, values.capacity)
 
-        const knapsackPSO = new AlgorithmPSO("knapsack", knapsack, values.maxIter, values.numParticles)
+        const knapsackPSO = new AlgorithmPSO(
+          'knapsack',
+          knapsack,
+          values.maxIter,
+          values.numParticles
+        )
 
         const knapsackResult = knapsackPSO.run()
 
         setResult(knapsackResult)
-
       } catch (error) {
-        console.error("Error running algorithm:", error)
-        setError("Une erreur s'est produite lors de l'exécution de l'algorithme. Veuillez réessayer.")
+        console.error('Error running algorithm:', error)
+        setError(
+          "Une erreur s'est produite lors de l'exécution de l'algorithme. Veuillez réessayer."
+        )
       } finally {
         setIsLoad(false)
       }
@@ -53,7 +66,7 @@ export const KnapsackResult = ({ values, onReset }: KnapsackResultProps) => {
   }, [values])
 
   if (isLoad) {
-    return <KnapsackTableSkeleton />
+    return <ProblemSkeleton />
   }
 
   if (error) {
@@ -73,14 +86,16 @@ export const KnapsackResult = ({ values, onReset }: KnapsackResultProps) => {
 
   if (!result || (result && result.best && result.best.length == 0)) {
     return (
-        <p className="text-muted-foreground">Aucun résultat trouvé. L&#39;algorithme n&#39;a pas pu trouver de solution.</p>
+      <p className="text-muted-foreground">
+        Aucun résultat trouvé. L&#39;algorithme n&#39;a pas pu trouver de solution.
+      </p>
     )
   }
 
-  const [weightTotal, weightObtained]  = calculateWeight(values.items, result.best)
+  const [weightTotal, weightObtained] = calculateWeight(values.items, result.best)
 
   return (
-    <div>
+    <div className="space-y-4">
       <div className="flex items-center flex-wrap gap-5">
         <Button variant="outline" onClick={onReset}>
           Réinitialiser
@@ -90,24 +105,22 @@ export const KnapsackResult = ({ values, onReset }: KnapsackResultProps) => {
 
       <div className="mt-8 space-y-5">
         <h2 className="text-base font-semibold">Résultats</h2>
-          <>
-            <KnapsackDataTable result={result.best} items={values.items} />
-            <div className="gap-4 flex flex-wrap">
-              <p className="py-1 px-2 border rounded-sm shadow-sm text-sm">
+        <>
+          <KnapsackDataTable result={result.best} items={values.items} />
+          <div className="gap-4 flex flex-wrap">
+            <p className="py-1 px-2 border rounded-sm shadow-sm text-sm">
               Poids total : {weightObtained} / {weightTotal}
-              </p>
-              <p className="py-1 px-2 border rounded-sm shadow-sm text-sm">
-              Score : {result.score}
-              </p>
-            </div>
-          </>
+            </p>
+            <p className="py-1 px-2 border rounded-sm shadow-sm text-sm">Score : {result.score}</p>
+          </div>
+        </>
       </div>
     </div>
   )
 }
 
-const KnapsackDataTable = ({ items, result }: { items: WeightValueItem[], result: number[] }) => {
-  if ((!items || items.length === 0) || (!result || result.length === 0)) {
+const KnapsackDataTable = ({ items, result }: { items: WeightValueItem[]; result: number[] }) => {
+  if (!items || items.length === 0 || !result || result.length === 0) {
     return <p className="text-muted-foreground">Aucun objet sélectionné dans la solution.</p>
   }
 

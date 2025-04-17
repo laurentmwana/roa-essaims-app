@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
-export const KnapsackTableSkeleton = ()  => {
+export const ProblemSkeleton = ()  => {
   return (
     <div className="rounded-md border">
       <Table>
