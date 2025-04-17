@@ -1,13 +1,13 @@
-"use client"
+'use client'
 
-import React, { useState, useEffect, useCallback } from "react"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Label } from "@/components/ui/label"
-import { FormItem } from "@/components/ui/form"
-import { Switch } from "./switch"
+import React, { useState, useEffect } from 'react'
+import { z } from 'zod'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Label } from '@/components/ui/label'
+import { FormItem } from '@/components/ui/form'
+import { Switch } from '@/components/ui/switch'
 
 interface MatrixDistanceInputProps {
   initialMatrix: number[][]
@@ -15,12 +15,33 @@ interface MatrixDistanceInputProps {
 }
 
 export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceInputProps) => {
-  const [size, setSize] = useState<number>(4)
+  const [size, setSize] = useState<number>(initialMatrix?.length || 4)
   const [enforceSymmetry, setEnforceSymmetry] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
-  const [matrix, setMatrix] = useState<number[][]>([])
+  const [matrix, setMatrix] = useState<number[][]>(() => {
+    if (initialMatrix && initialMatrix.length > 0) {
+      return initialMatrix
+    } else {
+      return Array(size)
+        .fill(0)
+        .map((_, i) =>
+          Array(size)
+            .fill(0)
+            .map((_, j) => (i === j ? 0 : 0))
+        )
+    }
+  })
 
-  const resizeMatrix = useCallback(() => {
+  // This effect only runs when initialMatrix changes from outside
+  useEffect(() => {
+    if (initialMatrix && initialMatrix.length > 0) {
+      setSize(initialMatrix.length)
+      setMatrix(initialMatrix)
+    }
+  }, [initialMatrix])
+
+  // This effect runs when size changes to resize the matrix
+  useEffect(() => {
     const currentSize = matrix.length
     if (currentSize === size) return
 
@@ -41,20 +62,7 @@ export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceI
 
     setMatrix(newMatrix)
     if (onChange) onChange(newMatrix)
-  }, [matrix, size, onChange])
-
-  useEffect(() => {
-    if (initialMatrix && initialMatrix.length > 0) {
-      setSize(initialMatrix.length)
-      setMatrix(initialMatrix)
-    } else {
-      resizeMatrix()
-    }
-  }, [initialMatrix, resizeMatrix])
-
-  useEffect(() => {
-    resizeMatrix()
-  }, [size, resizeMatrix])
+  }, [size]) // Only depend on size, not matrix or onChange
 
   const handleValueChange = (rowIndex: number, colIndex: number, value: number) => {
     if (rowIndex === colIndex) return
@@ -62,7 +70,7 @@ export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceI
     const numValue = value
 
     try {
-      z.number().min(0, "Les distances doivent être positives ou nulles").parse(numValue)
+      z.number().min(0, 'Les distances doivent être positives ou nulles').parse(numValue)
       setError(null)
 
       const updatedMatrix = [...matrix]
@@ -92,7 +100,7 @@ export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceI
       .map((_, i) =>
         Array(size)
           .fill(0)
-          .map((_, j) => (i === j ? 0 : 0)),
+          .map((_, j) => (i === j ? 0 : 0))
       )
 
     setMatrix(newMatrix)
@@ -102,10 +110,13 @@ export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceI
 
   const handleSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let newSize = Number.parseInt(e.target.value)
-    if (isNaN(newSize)) newSize = 4
-    if (newSize < 2) newSize = 2
-    if (newSize > 10) newSize = 10
-    setSize(newSize)
+
+    if (newSize !== size) {
+      if (isNaN(newSize)) newSize = 4
+      if (newSize < 2) newSize = 2
+      if (newSize > 10) newSize = 10
+      setSize(newSize)
+    }
   }
 
   return (
@@ -114,7 +125,15 @@ export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceI
       <div className="flex flex-wrap gap-4 items-center">
         <FormItem className="w-auto">
           <Label htmlFor="size">Taille</Label>
-          <Input id="size" type="number" min={2} max={10} value={size} onChange={handleSizeChange} className="w-20" />
+          <Input
+            id="size"
+            type="number"
+            min={2}
+            max={10}
+            value={size}
+            onChange={handleSizeChange}
+            className="w-20"
+          />
         </FormItem>
 
         <div className="flex items-center space-x-2">
@@ -141,7 +160,7 @@ export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceI
       {/* Grille de la matrice */}
       <div className="overflow-x-auto border rounded-lg p-2 border-gray-200 dark:border-gray-600">
         <div
-          className="grid gap-1"
+          className="grid gap-1 overflow-x-auto"
           style={{
             gridTemplateColumns: `auto repeat(${size}, minmax(60px, 1fr))`,
           }}
@@ -164,11 +183,13 @@ export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceI
                     type="number"
                     min={0}
                     value={matrix[rowIndex][colIndex]}
-                    onChange={(e) => handleValueChange(rowIndex, colIndex, Number.parseInt(e.target.value) || 0)}
+                    onChange={(e) =>
+                      handleValueChange(rowIndex, colIndex, Number.parseInt(e.target.value) || 0)
+                    }
                     className="text-center h-full"
                     disabled={rowIndex === colIndex}
                     style={{
-                      color: rowIndex === colIndex ? "var(--destructive)" : undefined,
+                      color: rowIndex === colIndex ? 'var(--destructive)' : undefined,
                     }}
                   />
                 </div>
@@ -185,7 +206,9 @@ export const MatrixDistanceInput = ({ initialMatrix, onChange }: MatrixDistanceI
           <li>Matrice carrée (même nombre de lignes et de colonnes)</li>
           <li>Les cellules diagonales sont fixées à 0 (distance d&#39;une ville à elle-même)</li>
           <li>Toutes les distances doivent être positives ou nulles</li>
-          {enforceSymmetry && <li>Symétrie forcée (distance de A vers B = distance de B vers A)</li>}
+          {enforceSymmetry && (
+            <li>Symétrie forcée (distance de A vers B = distance de B vers A)</li>
+          )}
         </ul>
       </div>
     </div>
