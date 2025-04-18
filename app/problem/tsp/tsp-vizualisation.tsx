@@ -51,15 +51,17 @@ export const TSPVisualization = ({
         data: { label: `Ville ${i + 1}` },
         type: 'default',
         style: {
-          background: '#f5f5f5',
-          border: '1px solid #222',
+          background: 'var(--accent)',
+          color: 'var(--accent-foreground)',
+          fontFamily: 'var(--font-sans)',
+          border: '1px solid var(--primary)',
           borderRadius: '50%',
           width: 60,
           height: 60,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          fontSize: '16px',
+          fontSize: '14px',
           fontWeight: 'bold',
         },
       })
@@ -82,6 +84,12 @@ export const TSPVisualization = ({
             label: distances[i][j].toString(),
             type: 'default',
             animated: true,
+            style: { stroke: 'var(--primary)', strokeWidth: 1 },
+            labelStyle: { fill: '#000', fontWeight: 'bold', fontSize: 13 },
+            markerEnd: {
+              type: MarkerType.ArrowClosed,
+              color: 'var(--primary)',
+            } satisfies EdgeMarker,
           })
         }
       }
@@ -105,11 +113,11 @@ export const TSPVisualization = ({
         label: distances[source][target].toString(),
         type: 'straight',
         animated: true,
-        style: { stroke: '#ff0072', strokeWidth: 2 },
-        labelStyle: { fill: '#000', fontWeight: 'bold', fontSize: 14 },
+        style: { stroke: 'var(--primary)', strokeWidth: 1 },
+        labelStyle: { fill: '#000', fontWeight: 'bold', fontSize: 13 },
         markerEnd: {
-          type: MarkerType.Arrow,
-          color: '#ff0072',
+          type: MarkerType.ArrowClosed,
+          color: 'var(--primary)',
         } satisfies EdgeMarker,
       })
     }
